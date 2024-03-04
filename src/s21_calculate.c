@@ -1,6 +1,7 @@
 #include "s21_calc.h"
 
 
+
 void push(S21_Stack_t *stack, const T value) {
     stack->data[stack->size] = value;
     stack->size++;
@@ -19,6 +20,14 @@ T peek(const S21_Stack_t *stack) {
         exit(STACK_UNDERFLOW);
     }
     return stack->data[stack->size - 1];
+}
+
+void initializeStack(S21_Stack_t *stack) {
+    stack->top = -1;
+}
+
+int isEmpty(S21_Stack_t *stack) {
+    return stack->top == -1;
 }
 
 S21_Stack_t* createStack()
@@ -54,6 +63,64 @@ void deleteStack(S21_Stack_t **stack) {
     *stack = NULL;
 }
 
+int isFull(S21_Stack_t *stack) {
+    return stack->top == stack->size - 1;
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+int divide(int a, int b) {
+    if (b == 0) {
+        printf("Error: Division by zero.\n");
+        exit(EXIT_FAILURE);
+    }
+    return a / b;
+}
+
+int s21_evaluateRPN(char *expression) {
+    S21_Stack_t operandStack;
+    initializeStack(&operandStack);
+
+    int length = strlen(expression);
+
+    for (int i = 0; i < length; i++) {
+        char token = expression[i];
+
+        if (isdigit(token)) {
+            push(&operandStack, token - '0');
+        } else if (token == '+' || token == '-' || token == '*' || token == '/') {
+            int operand2 = pop(&operandStack);
+            int operand1 = pop(&operandStack);
+
+            switch (token) {
+                case '+':
+                    push(&operandStack, add(operand1, operand2));
+                    break;
+                case '-':
+                    push(&operandStack, subtract(operand1, operand2));
+                    break;
+                case '*':
+                    push(&operandStack, multiply(operand1, operand2));
+                    break;
+                case '/':
+                    push(&operandStack, divide(operand1, operand2));
+                    break;
+            }
+        }
+    }
+
+    return pop(&operandStack);
+}
 
 // Пока в исходной строке есть необработанные лексемы, считываем очередную:
 

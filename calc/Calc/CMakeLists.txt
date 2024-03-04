@@ -6,6 +6,9 @@ option(BUILD_QDS_COMPONENTS "Build design studio components" ON)
 project(CalcApp LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
+set(QT_QML_OUTPUT_DIRECTORY
+	/Applications/Qt Design Studio.app/Contents/Resources/qt6_design_studio_reduced_version/qml
+)
 
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick)
 
